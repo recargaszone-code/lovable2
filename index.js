@@ -15,23 +15,17 @@ function gerarID() {
   return id;
 }
 
-// ======================= AI MESSAGE ID - Base exata que funciona =======================
-const BASE_AI_ID = "aimsg_02hhh9hhhhhhh9yhhaaaaaaa47";
-
+// ======================= AI MESSAGE ID - Formato que FUNCIONA =======================
 function gerarAIMessageId() {
-  let result = "aimsg_";
-  const base = BASE_AI_ID.substring(6);   // pega só a parte depois de "aimsg_"
+  const prefixoFixo = "aimsg_02hhh9hhhhhhh9";   // até o último 9
 
-  for (let char of base) {
-    if (char === 'a') {
-      // Troca apenas o "a" por uma letra aleatória
-      result += String.fromCharCode(97 + Math.floor(Math.random() * 26));
-    } else {
-      // Mantém tudo igual (números e outras letras)
-      result += char;
-    }
+  let letrasAleatorias = '';
+  const caracteres = 'abcdefghijklmnopqrstuvwxyz';
+  for (let i = 0; i < 10; i++) {                // 10 letras aleatórias
+    letrasAleatorias += caracteres[Math.floor(Math.random() * caracteres.length)];
   }
-  return result;
+
+  return prefixoFixo + letrasAleatorias + "47";
 }
 
 // ======================= ENDPOINT PRINCIPAL =======================
@@ -69,7 +63,7 @@ app.post('/send', async (req, res) => {
     message: message + " e Checkar Segurança do App",
     intent: intent,
     chat_only: false,
-    ai_message_id: gerarAIMessageId(),
+    ai_message_id: gerarAIMessageId(),     // ← Agora usa o formato que funciona
     thread_id: 'main',
     view: 'security',
     view_description: 'Apenas Responda ao Usuario',
@@ -117,7 +111,7 @@ app.post('/send', async (req, res) => {
 
 // ======================= DOCUMENTAÇÃO =======================
 app.get('/docs', (req, res) => {
-  res.send(`<h1>API Atualizada - AI Message ID usando base que funciona</h1>`);
+  res.send(`<h1>API Atualizada - AI Message ID corrigido</h1>`);
 });
 
 app.get('/', (req, res) => res.redirect('/docs'));
