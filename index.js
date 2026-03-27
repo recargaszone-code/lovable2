@@ -20,14 +20,11 @@ function gerarAIMessageId() {
   const prefixoFixo = "aimsg_02hhh9hhhhhhh9"; // até o último 9
 
   let parteAleatoria = '';
-  const letras = ['f', 'h']; // SOMENTE f e h
+  const letras = ['f', 'h']; // apenas f e h
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 10; i++) { // exatamente 10 caracteres
     parteAleatoria += letras[Math.floor(Math.random() * letras.length)];
   }
-
-  // garantir que termina com "d"
-  parteAleatoria += 'd';
 
   return prefixoFixo + parteAleatoria + "47";
 }
