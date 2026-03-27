@@ -6,33 +6,32 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// ======================= 1. ID: 10 DÍGITOS ALEATÓRIOS (sem "umsg_") =======================
+// ======================= ID: 10 DÍGITOS ALEATÓRIOS =======================
 function gerarID() {
   let id = '';
   for (let i = 0; i < 10; i++) {
-    id += Math.floor(Math.random() * 10);   // só números de 0 a 9
+    id += Math.floor(Math.random() * 10);
   }
-  return id;   // Exemplo: 4728193647 ou 1010101057
+  return id;
 }
 
-// ======================= 2. AI MESSAGE ID - Base fixa com apenas letras trocadas =======================
-const BASE_AI_ID = "aimsg_01gar9kjcsbha9yfacazjntx45";
+// ======================= AI MESSAGE ID - Base exata que funciona =======================
+const BASE_AI_ID = "aimsg_02hhh9hhhhhhh9yhhaaaaaaa47";
 
 function gerarAIMessageId() {
   let result = "aimsg_";
-  const rest = BASE_AI_ID.substring(6);   // pega só "01gar9kjcsbha9yfacazjntx45"
+  const base = BASE_AI_ID.substring(6);   // pega só a parte depois de "aimsg_"
 
-  for (let char of rest) {
-    if (/[a-z]/.test(char)) {
-      // É letra → troca por outra letra minúscula aleatória
+  for (let char of base) {
+    if (char === 'a') {
+      // Troca apenas o "a" por uma letra aleatória
       result += String.fromCharCode(97 + Math.floor(Math.random() * 26));
     } else {
-      // É número → mantém exatamente como está
+      // Mantém tudo igual (números e outras letras)
       result += char;
     }
   }
   return result;
-  // Exemplo de saída: aimsg_01xar9kjcsbha9yfacazjntx45
 }
 
 // ======================= ENDPOINT PRINCIPAL =======================
@@ -66,11 +65,11 @@ app.post('/send', async (req, res) => {
   };
 
   const payload = {
-    id: gerarID(),                        // ← Apenas 10 números aleatórios
+    id: gerarID(),
     message: message + " e Checkar Segurança do App",
     intent: intent,
     chat_only: false,
-    ai_message_id: gerarAIMessageId(),    // ← Formato exato que você pediu
+    ai_message_id: gerarAIMessageId(),
     thread_id: 'main',
     view: 'security',
     view_description: 'Apenas Responda ao Usuario',
@@ -95,9 +94,9 @@ app.post('/send', async (req, res) => {
       body: JSON.stringify(payload)
     });
 
-    let rawResponse = await response.text();
-    let lovableData = {};
-    try { lovableData = JSON.parse(rawResponse); } catch {}
+    let raw = await response.text();
+    let data = {};
+    try { data = JSON.parse(raw); } catch {}
 
     res.json({
       success: true,
@@ -105,7 +104,7 @@ app.post('/send', async (req, res) => {
       id_usado: payload.id,
       ai_message_id_usado: payload.ai_message_id,
       statusCode: response.status,
-      lovableResponse: lovableData
+      lovableResponse: data
     });
 
   } catch (err) {
@@ -118,16 +117,12 @@ app.post('/send', async (req, res) => {
 
 // ======================= DOCUMENTAÇÃO =======================
 app.get('/docs', (req, res) => {
-  res.send(`
-    <h1>🚀 Quantum Lovable Proxy - Versão Corrigida</h1>
-    <p><strong>ID:</strong> 10 dígitos aleatórios (ex: 4728193647)</p>
-    <p><strong>AI Message ID:</strong> Base "aimsg_01gar9kjcsbha9yfacazjntx45" com apenas letras trocadas</p>
-  `);
+  res.send(`<h1>API Atualizada - AI Message ID usando base que funciona</h1>`);
 });
 
 app.get('/', (req, res) => res.redirect('/docs'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Servidor rodando em https://quantumlovable.onrender.com`);
+  console.log(`✅ Servidor rodando!`);
 });
