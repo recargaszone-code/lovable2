@@ -17,14 +17,17 @@ function gerarID() {
 
 // ======================= AI MESSAGE ID - Muito Aleatório =======================
 function gerarAIMessageId() {
-  const prefixoFixo = "aimsg_02hhh9hhhhhhh9";   // até o último 9
+  const prefixoFixo = "aimsg_02hhh9hhhhhhh9"; // até o último 9
 
   let parteAleatoria = '';
-  const letras = 'abcdefghijklmnopqrstuvwxyz';
+  const letras = ['f', 'h']; // SOMENTE f e h
 
-  for (let i = 0; i < 10; i++) {   // 10 letras bem aleatórias
-    parteAleatoria += letras[Math.floor(Math.random() * 26)];
+  for (let i = 0; i < 10; i++) {
+    parteAleatoria += letras[Math.floor(Math.random() * letras.length)];
   }
+
+  // garantir que termina com "d"
+  parteAleatoria += 'd';
 
   return prefixoFixo + parteAleatoria + "47";
 }
